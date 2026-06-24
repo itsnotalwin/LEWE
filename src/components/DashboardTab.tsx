@@ -16,9 +16,12 @@ import {
   CheckSquare, 
   Coins, 
   Smile, 
-  Calendar 
+  Calendar,
+  FolderGit2,
+  Target
 } from 'lucide-react';
 import { Habit, Task, Transaction, DailyFocus, LifeOSData } from '../types';
+import DailyAffirmation from './DailyAffirmation';
 
 interface DashboardTabProps {
   data: LifeOSData;
@@ -154,7 +157,7 @@ export default function DashboardTab({ data, updateData, setActiveTab, getCurren
     <div className="space-y-6">
       {/* Prime Header & Timebox HUD */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
-        <div className="md:col-span-2 bg-gradient-to-br from-accent to-espresso text-alabaster p-6 rounded-3xl shadow-lg border border-sand/10 relative overflow-hidden flex flex-col justify-between group">
+        <div className="md:col-span-2 bg-gradient-to-br from-accent to-espresso dark:to-espresso-surface-bright text-alabaster p-6 rounded-3xl shadow-lg border border-sand/10 dark:border-white/5 relative overflow-hidden flex flex-col justify-between group transition-all duration-500">
           <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
             <Sparkles className="w-40 h-40 text-white" />
           </div>
@@ -241,11 +244,14 @@ export default function DashboardTab({ data, updateData, setActiveTab, getCurren
           </div>
           <div className="flex items-center space-x-3 bg-parchment dark:bg-espresso-surface-bright text-accent rounded-2xl p-3 border border-sand dark:border-espresso-surface transition-colors">
             <Sparkles className="w-4 h-4 flex-shrink-0" />
-            <span className="text-[11px] font-bold leading-tight italic">Groq Intelligence Engine optimized.</span>
+            <span className="text-[11px] font-bold leading-tight italic">Offline-First IndexedDB Engine synchronized.</span>
           </div>
         </div>
 
       </div>
+
+      {/* Daily Affirmation */}
+      <DailyAffirmation todayStr={todayStr} />
 
       {/* Bento Board Overview Rows */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -366,6 +372,116 @@ export default function DashboardTab({ data, updateData, setActiveTab, getCurren
           </button>
         </div>
       </div>
+
+      {/* Project Execution Hub */}
+      <div className="clay-card p-6 space-y-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="p-2 bg-accent/10 rounded-xl">
+              <FolderGit2 className="w-5 h-5 text-accent" />
+            </div>
+            <div className="space-y-0.5">
+              <h2 className="text-base font-black text-espresso dark:text-alabaster uppercase tracking-tight">Project Execution Hub</h2>
+              <p className="text-[10px] text-espresso/40 dark:text-alabaster/40 font-bold">Track circular completion rates across active system initiatives</p>
+            </div>
+          </div>
+          <button
+            onClick={() => setActiveTab('tasks')}
+            className="text-[10px] font-black text-accent hover:text-accent-hover uppercase tracking-widest flex items-center space-x-1 transition-all"
+          >
+            <span>View Initiatives</span>
+            <ArrowUpRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+
+        {data.projects && data.projects.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {data.projects.map((project) => {
+              const projectTasks = (data.tasks || []).filter(t => t.projectId === project.id);
+              const totalTasks = projectTasks.length;
+              const completedTasks = projectTasks.filter(t => t.completed).length;
+              const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+              
+              const radius = 22;
+              const circumference = 2 * Math.PI * radius;
+              const strokeDashoffset = circumference - (progress / 100) * circumference;
+
+              return (
+                <div 
+                  key={project.id}
+                  onClick={() => setActiveTab('tasks')}
+                  className="p-5 flex items-center justify-between border border-sand dark:border-white/5 bg-parchment/30 dark:bg-espresso-surface/30 hover:border-accent/30 dark:hover:border-white/15 transition-all duration-300 group rounded-2xl cursor-pointer active:scale-[0.98] hover:shadow-sm"
+                >
+                  <div className="flex items-center space-x-4 min-w-0">
+                    {/* Circular SVG Progress Ring with centered percentage text */}
+                    <div className="relative flex items-center justify-center flex-shrink-0">
+                      <svg className="w-14 h-14 transform -rotate-90 flex-shrink-0">
+                        {/* Background track circle */}
+                        <circle
+                          cx="28"
+                          cy="28"
+                          r={radius}
+                          stroke="currentColor"
+                          strokeWidth="4"
+                          fill="transparent"
+                          className="text-sand/20 dark:text-espresso-surface-bright"
+                        />
+                        {/* Animated foreground progress circle */}
+                        <circle
+                          cx="28"
+                          cy="28"
+                          r={radius}
+                          stroke={project.color || '#8b5e3c'}
+                          strokeWidth="4"
+                          fill="transparent"
+                          strokeDasharray={circumference}
+                          strokeDashoffset={strokeDashoffset}
+                          strokeLinecap="round"
+                          className="transition-all duration-700 ease-out"
+                        />
+                      </svg>
+                      <span className="absolute text-[10px] font-black font-mono text-espresso dark:text-alabaster">
+                        {progress}%
+                      </span>
+                    </div>
+
+                    {/* Project Metadata */}
+                    <div className="min-w-0">
+                      <div className="flex items-center space-x-2">
+                        <span 
+                          className="w-1.5 h-1.5 rounded-full flex-shrink-0" 
+                          style={{ backgroundColor: project.color || '#8b5e3c' }} 
+                        />
+                        <h4 className="text-sm font-black text-espresso dark:text-alabaster truncate group-hover:text-accent transition-colors">
+                          {project.name}
+                        </h4>
+                      </div>
+                      <p className="text-[10px] text-espresso/50 dark:text-alabaster/50 mt-1 truncate max-w-[150px] font-medium">
+                        {project.description || 'System initiative pipeline'}
+                      </p>
+                      <div className="flex items-center space-x-2 mt-2">
+                        <span className="text-[9px] font-mono font-bold text-espresso/40 dark:text-alabaster/40 uppercase tracking-widest bg-sand/20 dark:bg-black/20 px-1.5 py-0.5 rounded">
+                          {project.category}
+                        </span>
+                        <span className="text-[9px] font-mono font-bold text-accent">
+                          {completedTasks}/{totalTasks} tasks
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <ArrowUpRight className="w-4 h-4 text-espresso/30 dark:text-alabaster/30 group-hover:text-accent group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all flex-shrink-0 ml-2" />
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="py-12 text-center text-espresso/30 dark:text-alabaster/30 text-xs font-mono font-bold uppercase tracking-widest italic border border-dashed border-sand dark:border-white/5 rounded-2xl">
+            No active projects inside local database.
+          </div>
+        )}
+      </div>
+
       {/* Main Bottom Section: Daily Habits checkoff & Quick Tasks list */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         

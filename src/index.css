@@ -96,6 +96,19 @@
   @apply bg-gradient-to-br from-espresso-surface to-cocoa border-white/[0.05] shadow-[0_8px_40px_rgba(0,0,0,0.5)];
 }
 
+/* Custom override for dark mode primary/accent color to have high contrast warm tone */
+:root.dark {
+  --color-accent: #c58f5c;
+  --color-accent-hover: #b07d56;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --color-accent: #c58f5c;
+    --color-accent-hover: #b07d56;
+  }
+}
+
 .text-gradient {
   @apply bg-clip-text text-transparent bg-gradient-to-br from-espresso to-espresso/60;
 }
@@ -104,4 +117,8 @@
   .text-gradient {
     @apply from-alabaster to-alabaster/50;
   }
+}
+
+:root.dark .text-gradient {
+  @apply from-alabaster to-alabaster/50;
 }

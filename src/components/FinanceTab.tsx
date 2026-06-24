@@ -54,7 +54,7 @@ export default function FinanceTab({ data, updateData, getCurrentDate }: Finance
   const monthlyBalance = totalIncome - totalExpenses;
 
   // Life OS Capital Net Balance (All transactions)
-  const netBalance = transactions.reduce((sum, t) => {
+  const netBalance = transactions.length === 0 ? 0 : transactions.reduce((sum, t) => {
     return sum + (t.type === 'income' ? Math.abs(t.amount) : -Math.abs(t.amount));
   }, 1500); // Startup seeding envelope of R1500 bank seed
 

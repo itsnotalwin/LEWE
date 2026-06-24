@@ -13,7 +13,6 @@ import {
   Smile, 
   Flame, 
   CheckSquare, 
-  BrainCircuit, 
   Settings, 
   LogOut, 
   TrendingUp, 
@@ -26,6 +25,7 @@ import {
 } from 'lucide-react';
 import { Habit, Task, Project, Transaction, JournalEntry, DailyFocus, LifeOSData } from './types';
 import { generateSeedData } from './mockData';
+import { saveState, loadState, clearAllStorage } from './storage';
 
 // Tabs
 import DashboardTab from './components/DashboardTab';
@@ -33,7 +33,6 @@ import HabitsTab from './components/HabitsTab';
 import TasksTab from './components/TasksTab';
 import FinanceTab from './components/FinanceTab';
 import JournalTab from './components/JournalTab';
-import AICoachTab from './components/AICoachTab';
 import SettingsTab from './components/SettingsTab';
 
 export default function App() {
@@ -57,32 +56,34 @@ export default function App() {
     localStorage.setItem('life-os-dark-mode', darkMode.toString());
   }, [darkMode]);
 
-  // Load from LocalStorage on mount
+  // Load from IndexedDB on mount with localStorage fallback
   useEffect(() => {
-    const local = localStorage.getItem('life_os_data_v1');
-    if (local) {
+    async function hydrateState() {
       try {
-        const parsed = JSON.parse(local);
-        // Fallback for missing keys in older saves
-        if (!parsed.habits) parsed.habits = [];
-        if (!parsed.tasks) parsed.tasks = [];
-        if (!parsed.projects) parsed.projects = [];
-        if (!parsed.transactions) parsed.transactions = [];
-        if (!parsed.journal) parsed.journal = [];
-        if (!parsed.focus) parsed.focus = { text: '', completed: false, date: '' };
-        setData(parsed);
+        const stored = await loadState();
+        if (stored) {
+          // Fallback for missing keys in older saves
+          if (!stored.habits) stored.habits = [];
+          if (!stored.tasks) stored.tasks = [];
+          if (!stored.projects) stored.projects = [];
+          if (!stored.transactions) stored.transactions = [];
+          if (!stored.journal) stored.journal = [];
+          if (!stored.focus) stored.focus = { text: '', completed: false, date: '' };
+          setData(stored);
+        } else {
+          // Automatic seeding for a beautiful initial experience!
+          const seed = generateSeedData();
+          setData(seed);
+          await saveState(seed);
+        }
       } catch (err) {
-        console.error('Failed to parse localStorage logs, seeding defaults.', err);
+        console.error('Failed to load storage, seeding defaults.', err);
         const seed = generateSeedData();
         setData(seed);
-        localStorage.setItem('life_os_data_v1', JSON.stringify(seed));
+        saveState(seed).catch(saveErr => console.error('Save fallback failed', saveErr));
       }
-    } else {
-      // Automatic seeding for a beautiful initial experience!
-      const seed = generateSeedData();
-      setData(seed);
-      localStorage.setItem('life_os_data_v1', JSON.stringify(seed));
     }
+    hydrateState();
   }, []);
 
   // Utility to get current browser date (YYYY-MM-DD format)
@@ -93,16 +94,16 @@ export default function App() {
 
   const todayStr = getCurrentDate();
 
-  // Helper to update global state and persist to LocalStorage
+  // Helper to update global state and persist to storage
   const updateData = (newData: Partial<LifeOSData>) => {
     if (!data) return;
     const merged = { ...data, ...newData };
     setData(merged);
-    localStorage.setItem('life_os_data_v1', JSON.stringify(merged));
+    saveState(merged).catch(err => console.error('Failed to auto-save to IndexedDB:', err));
   };
 
   // Completely reset databases
-  const resetAllData = () => {
+  const resetAllData = async () => {
     const emptyState: LifeOSData = {
       habits: [],
       tasks: [],
@@ -113,7 +114,8 @@ export default function App() {
       apiKeys: {},
     };
     setData(emptyState);
-    localStorage.setItem('life_os_data_v1', JSON.stringify(emptyState));
+    await clearAllStorage();
+    await saveState(emptyState);
   };
 
   if (!data) {
@@ -141,7 +143,6 @@ export default function App() {
     { id: 'tasks', label: 'Action Board', icon: CheckSquare, badge: data.tasks.filter(t => !t.completed).length || null },
     { id: 'finance', label: 'Capital Log', icon: Coins, badge: null },
     { id: 'journal', label: 'Mind & Diary', icon: BookOpen, badge: null },
-    { id: 'coach', label: 'Groq Advisor', icon: BrainCircuit, badge: 'AI' },
     { id: 'settings', label: 'OS Controls', icon: Settings, badge: null },
   ];
 
@@ -151,7 +152,7 @@ export default function App() {
       {/* Top Banner Bar for Mobile Switchers */}
       <header className="bg-white dark:bg-espresso-surface border-b border-sand dark:border-espresso-surface-bright px-6 py-4 flex items-center justify-between lg:hidden sticky top-0 z-40 shadow-sm">
         <div className="flex items-center space-x-2">
-          <div className="p-2 bg-accent rounded-xl text-white">
+          <div className="p-2 bg-accent rounded-xl text-white dark:text-cocoa transition-all duration-500">
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
@@ -176,7 +177,7 @@ export default function App() {
             
             {/* Sidebar Logo */}
             <div className="flex items-center space-x-3 px-2">
-              <div className="p-2.5 bg-accent rounded-2xl text-white shadow-sm flex-shrink-0 soft-pulse">
+              <div className="p-2.5 bg-accent rounded-2xl text-white dark:text-cocoa shadow-sm flex-shrink-0 soft-pulse transition-all duration-500">
                 <Sparkles className="w-5 h-5" />
               </div>
               <div>
@@ -208,14 +209,14 @@ export default function App() {
                   <button
                     key={item.id}
                     onClick={() => setActiveTab(item.id)}
-                    className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 cursor-pointer group ${
+                    className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 cursor-pointer group ${
                       active 
-                        ? 'bg-accent text-white shadow-lg shadow-accent/20 translate-x-1' 
+                        ? 'bg-accent text-white dark:text-cocoa shadow-lg shadow-accent/20 translate-x-1' 
                         : 'text-espresso/40 dark:text-alabaster/40 hover:bg-parchment dark:hover:bg-espresso-surface-bright hover:text-espresso dark:hover:text-alabaster hover:translate-x-1'
                     }`}
                   >
                     <div className="flex items-center space-x-3 min-w-0">
-                      <IconComp className={`w-4 h-4 flex-shrink-0 transition-transform group-hover:scale-110 ${active ? 'text-white' : 'text-accent/40'}`} />
+                      <IconComp className={`w-4 h-4 flex-shrink-0 transition-transform group-hover:scale-110 ${active ? 'text-white dark:text-cocoa' : 'text-accent/40'}`} />
                       <span className="truncate leading-none">{item.label}</span>
                     </div>
 
@@ -233,17 +234,11 @@ export default function App() {
 
           </div>
 
-          {/* Footer User Widget */}
-          <div className="border-t border-sand dark:border-espresso-surface-bright pt-4 space-y-1">
-            <div className="flex items-center space-x-2.5 px-2">
-              <div className="w-8 h-8 rounded-full bg-parchment dark:bg-espresso-surface-bright border border-sand dark:border-espresso-surface text-accent flex items-center justify-center font-bold text-xs font-mono">
-                LO
-              </div>
-              <div className="min-w-0">
-                <span className="font-extrabold text-[11px] text-espresso dark:text-alabaster block truncate leading-none">Standard Operator</span>
-                <span className="text-[10px] text-espresso/40 dark:text-alabaster/40 mt-1 block truncate leading-none">itsnotalwin@gmail.com</span>
-              </div>
-            </div>
+          {/* Footer Version Widget */}
+          <div className="border-t border-sand dark:border-espresso-surface-bright pt-4 text-center">
+            <span className="text-[9px] font-mono font-bold text-espresso/30 dark:text-alabaster/30 uppercase tracking-[0.2em]">
+              Life OS Workspace V1.2
+            </span>
           </div>
         </aside>
 
@@ -289,7 +284,7 @@ export default function App() {
                         setMobileMenuOpen(false);
                       }}
                       className={`w-full flex items-center justify-between px-4 py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] transition cursor-pointer ${
-                        active ? 'bg-accent text-white shadow-lg' : 'text-espresso/40 dark:text-alabaster/40 bg-parchment/50 dark:bg-black/10'
+                        active ? 'bg-accent text-white dark:text-cocoa shadow-lg' : 'text-espresso/40 dark:text-alabaster/40 bg-parchment/50 dark:bg-black/10'
                       }`}
                     >
                       <div className="flex items-center space-x-4 min-w-0">
@@ -308,9 +303,8 @@ export default function App() {
                 })}
               </nav>
 
-              <div className="mt-auto border-t border-sand dark:border-espresso-surface-bright pt-4 text-xs space-y-1">
-                <p className="font-bold text-espresso dark:text-alabaster">itsnotalwin@gmail.com</p>
-                <p className="text-[10px] text-espresso/40 dark:text-alabaster/40 font-mono italic">Life OS Web App V1</p>
+              <div className="mt-auto border-t border-sand dark:border-espresso-surface-bright pt-4 text-center">
+                <p className="text-[10px] text-espresso/40 dark:text-alabaster/40 font-mono italic uppercase tracking-widest">Life OS Web App V1.2</p>
               </div>
 
             </div>
@@ -356,14 +350,6 @@ export default function App() {
 
             {activeTab === 'journal' && (
               <JournalTab 
-                data={data} 
-                updateData={updateData} 
-                getCurrentDate={getCurrentDate} 
-              />
-            )}
-
-            {activeTab === 'coach' && (
-              <AICoachTab 
                 data={data} 
                 updateData={updateData} 
                 getCurrentDate={getCurrentDate} 

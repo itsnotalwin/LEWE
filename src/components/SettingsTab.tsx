@@ -36,9 +36,6 @@ interface SettingsTabProps {
 }
 
 export default function SettingsTab({ data, updateData, resetAllData }: SettingsTabProps) {
-  const [apiKeyInput, setApiKeyInput] = useState(data.apiKeys?.groq || '');
-  const [showKey, setShowKey] = useState(false);
-  const [saveSuccess, setSaveSuccess] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -83,20 +80,6 @@ export default function SettingsTab({ data, updateData, resetAllData }: Settings
       action,
       isDestructive,
     });
-  };
-
-  // Handle custom Groq key save
-  const handleSaveKey = (e: React.FormEvent) => {
-    e.preventDefault();
-    updateData({
-      apiKeys: {
-        ...data.apiKeys,
-        groq: apiKeyInput.trim(),
-      },
-    });
-    setSaveSuccess(true);
-    showToast('System validation key successfully registered.', 'success');
-    setTimeout(() => setSaveSuccess(false), 2500);
   };
 
   // Run mock seed
@@ -206,59 +189,8 @@ export default function SettingsTab({ data, updateData, resetAllData }: Settings
       {/* 2-Column Grid Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
         
-        {/* Left Side: API Key / System settings */}
+        {/* Left Side: System settings */}
         <div className="lg:col-span-2 space-y-8">
-          
-          {/* Custom Groq Key Token */}
-          <div className="clay-card p-8 space-y-6">
-            <div className="flex items-center space-x-3 text-accent">
-              <Key className="w-5 h-5" />
-              <h2 className="text-sm font-black uppercase tracking-[0.2em] text-espresso dark:text-alabaster">System Authentication Layer</h2>
-            </div>
-            
-            <p className="text-[11px] text-espresso/50 dark:text-alabaster/50 leading-relaxed font-bold">
-              When deploying statically (e.g., GitHub Pages), the server-side proxy is bypassed. Supply a personal **Groq AI API Key** to maintain structural strategy auditing functionality.
-            </p>
-
-            <form onSubmit={handleSaveKey} className="space-y-4">
-              <div className="flex flex-col sm:flex-row items-stretch gap-4">
-                <div className="relative flex-1">
-                  <input
-                    type={showKey ? 'text' : 'password'}
-                    placeholder="Enter Secure Key 'gsk_..."
-                    value={apiKeyInput}
-                    onChange={(e) => setApiKeyInput(e.target.value)}
-                    className="w-full bg-parchment dark:bg-black/10 border border-sand dark:border-white/5 text-espresso dark:text-alabaster text-[11px] font-mono font-black rounded-2xl pl-5 pr-12 py-4 focus:outline-none focus:ring-2 focus:ring-accent placeholder:text-espresso/20 placeholder:font-sans shadow-inner"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowKey(!showKey)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-espresso/30 dark:text-alabaster/30 hover:text-accent p-1 transition-colors"
-                  >
-                    {showKey ? <EyeOff className="w-4.5 h-4.5" /> : <Eye className="w-4.5 h-4.5" />}
-                  </button>
-                </div>
-                <button
-                  type="submit"
-                  className="bg-accent hover:bg-accent-hover text-white font-black text-[10px] items-center justify-center uppercase tracking-[0.2em] px-8 py-4 rounded-2xl transition shadow-lg shadow-accent/20 cursor-pointer flex items-center space-x-2 active:scale-95"
-                >
-                  {saveSuccess ? (
-                    <>
-                      <Check className="w-4 h-4 text-emerald-300" />
-                      <span>Authorized</span>
-                    </>
-                  ) : (
-                    <span>Update Token</span>
-                  )}
-                </button>
-              </div>
-
-              <div className="flex items-center space-x-3 text-[9px] text-espresso/40 dark:text-alabaster/40 bg-sand/10 dark:bg-white/5 p-4 rounded-xl border border-sand dark:border-white/5 font-mono uppercase tracking-widest font-black">
-                <Terminal className="w-4 h-4 text-accent" />
-                <span>Encrypted strictly to persistent local indexDB shell.</span>
-              </div>
-            </form>
-          </div>
 
           {/* Database Operations */}
           <div className="clay-card p-8 space-y-6">
