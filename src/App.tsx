@@ -120,7 +120,7 @@ export default function App() {
 
   if (!data) {
     return (
-      <div className="min-h-screen bg-parchment dark:bg-cocoa flex flex-col items-center justify-center p-10 transition-colors duration-500">
+      <div className="min-h-dvh bg-parchment dark:bg-cocoa flex flex-col items-center justify-center p-10 transition-colors duration-500">
         <div className="relative">
           <div className="w-24 h-24 border-4 border-sand dark:border-white/5 rounded-full animate-[spin_3s_linear_infinite]" />
           <div className="absolute inset-0 flex items-center justify-center">
@@ -147,7 +147,7 @@ export default function App() {
   ];
 
   return (
-    <div className="min-h-screen bg-parchment dark:bg-cocoa flex flex-col selection:bg-accent selection:text-white">
+    <div className="min-h-dvh bg-parchment dark:bg-cocoa flex flex-col selection:bg-accent selection:text-white">
       
       {/* Top Banner Bar for Mobile Switchers */}
       <header className="bg-white dark:bg-espresso-surface border-b border-sand dark:border-espresso-surface-bright px-6 py-4 flex items-center justify-between lg:hidden sticky top-0 z-40 shadow-sm">
@@ -172,7 +172,7 @@ export default function App() {
       <div className="flex-1 flex max-w-[1600px] w-full mx-auto relative h-full">
         
         {/* Desktop Sidebar Navigation */}
-        <aside className="w-64 bg-white dark:bg-espresso-surface border-r border-sand dark:border-espresso-surface-bright p-5 hidden lg:flex flex-col justify-between sticky top-0 h-screen overflow-y-auto">
+        <aside className="w-64 bg-white dark:bg-espresso-surface border-r border-sand dark:border-espresso-surface-bright p-5 hidden lg:flex flex-col justify-between sticky top-0 h-dvh overflow-y-auto">
           <div className="space-y-6">
             
             {/* Sidebar Logo */}
@@ -312,7 +312,7 @@ export default function App() {
         )}
 
         {/* Major Working Canvas */}
-        <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 overflow-y-auto max-h-screen">
+        <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-8">
           <div className="max-w-5xl mx-auto space-y-6 pb-24">
             
             {activeTab === 'dashboard' && (

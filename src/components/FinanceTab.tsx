@@ -255,7 +255,7 @@ export default function FinanceTab({ data, updateData, getCurrentDate }: Finance
             </div>
             <button
               onClick={() => setShowAddForm(!showAddForm)}
-              className="bg-accent hover:bg-accent-hover text-white font-black text-[10px] uppercase tracking-widest px-6 py-3.5 rounded-2xl transition-all duration-200 shadow-lg shadow-accent/20 flex items-center space-x-2 cursor-pointer active:scale-95"
+              className="bg-accent hover:bg-accent-hover text-white dark:text-cocoa font-black text-[10px] uppercase tracking-widest px-6 py-3.5 rounded-2xl transition-all duration-200 shadow-lg shadow-accent/20 flex items-center space-x-2 cursor-pointer active:scale-95"
             >
               <PlusCircle className="w-4 h-4" />
               <span>Log Entry</span>
@@ -381,7 +381,7 @@ export default function FinanceTab({ data, updateData, getCurrentDate }: Finance
                 </button>
                 <button
                   type="submit"
-                  className="bg-accent hover:bg-accent-hover text-white px-8 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-[0.15em] transition shadow-lg shadow-accent/20 cursor-pointer active:scale-95"
+                  className="bg-accent hover:bg-accent-hover text-white dark:text-cocoa px-8 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-[0.15em] transition shadow-lg shadow-accent/20 cursor-pointer active:scale-95"
                 >
                   Commit Flow
                 </button>

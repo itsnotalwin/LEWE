@@ -47,7 +47,7 @@ export default function JournalTab({ data, updateData, getCurrentDate }: Journal
     energetic: { label: 'Fired Up', emoji: '⚡', color: 'bg-orange-100 text-orange-850 border-orange-200' },
     tired: { label: 'Resting', emoji: '😴', color: 'bg-blue-100 text-blue-800 border-blue-200' },
     productive: { label: 'Deep Focus', emoji: '✍️', color: 'bg-emerald-100 text-emerald-800 border-emerald-200' },
-    neutral: { label: 'Neutral', emoji: '😐', color: 'bg-slate-100 text-slate-800 border-slate-200' },
+    neutral: { label: 'Neutral', emoji: '😐', color: 'bg-sand/20 text-espresso dark:text-alabaster border-sand/40 dark:border-white/10' },
     anxious: { label: 'Mindful care', emoji: '🌪️', color: 'bg-rose-100 text-rose-800 border-rose-200' },
   };
 
@@ -104,7 +104,7 @@ export default function JournalTab({ data, updateData, getCurrentDate }: Journal
         </div>
         <button
           onClick={() => setShowAddForm(!showAddForm)}
-          className="bg-accent hover:bg-accent-hover text-white font-black text-[10px] uppercase tracking-[0.2em] px-6 py-3.5 rounded-2xl transition-all duration-200 shadow-lg shadow-accent/20 flex items-center space-x-2 cursor-pointer active:scale-95"
+          className="bg-accent hover:bg-accent-hover text-white dark:text-cocoa font-black text-[10px] uppercase tracking-[0.2em] px-6 py-3.5 rounded-2xl transition-all duration-200 shadow-lg shadow-accent/20 flex items-center space-x-2 cursor-pointer active:scale-95"
         >
           <Plus className="w-4 h-4" />
           <span>{showAddForm ? 'View Matrix' : 'Record Entry'}</span>
@@ -232,7 +232,7 @@ export default function JournalTab({ data, updateData, getCurrentDate }: Journal
             </button>
             <button
               type="submit"
-              className="bg-accent hover:bg-accent-hover text-white px-10 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-[0.15em] transition shadow-lg shadow-accent/20 cursor-pointer active:scale-95"
+              className="bg-accent hover:bg-accent-hover text-white dark:text-cocoa px-10 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-[0.15em] transition shadow-lg shadow-accent/20 cursor-pointer active:scale-95"
             >
               Archive Entry
             </button>
@@ -300,7 +300,7 @@ export default function JournalTab({ data, updateData, getCurrentDate }: Journal
               <p className="text-[10px] text-espresso/30 dark:text-alabaster/30 mt-2 max-w-sm mx-auto font-bold font-mono tracking-widest uppercase">Record today's structural narrative to initialize logs.</p>
               <button
                 onClick={() => setShowAddForm(true)}
-                className="mt-8 bg-accent hover:bg-accent-hover text-white font-black text-[10px] uppercase tracking-widest px-8 py-4 rounded-2xl transition shadow-lg shadow-accent/20"
+                className="mt-8 bg-accent hover:bg-accent-hover text-white dark:text-cocoa font-black text-[10px] uppercase tracking-widest px-8 py-4 rounded-2xl transition shadow-lg shadow-accent/20"
               >
                 Create Initial Log
               </button>

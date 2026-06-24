@@ -154,30 +154,28 @@ export default function DashboardTab({ data, updateData, setActiveTab, getCurren
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-12">
       {/* Prime Header & Timebox HUD */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
-        <div className="md:col-span-2 bg-gradient-to-br from-accent to-espresso dark:to-espresso-surface-bright text-alabaster p-6 rounded-3xl shadow-lg border border-sand/10 dark:border-white/5 relative overflow-hidden flex flex-col justify-between group transition-all duration-500">
-          <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
-            <Sparkles className="w-40 h-40 text-white" />
-          </div>
-          <div>
-            <div className="flex items-center space-x-2 text-sand text-sm font-medium tracking-wide">
-              <Calendar className="w-4 h-4" />
-              <span>{formatDateFull(time)}</span>
-            </div>
-            <h1 className="text-3xl md:text-4xl font-black tracking-tight mt-2 text-white drop-shadow-sm">
-              {getGreeting()}, Chief
-            </h1>
-            <p className="text-sand/80 text-sm mt-2 max-w-lg leading-relaxed font-medium">
-              Your personal workspace is ready. Today is a clean canvas to optimize habits, execute actions, and capture creative logs.
-            </p>
-          </div>
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mt-6">
+        <div className="max-w-2xl">
+          <p className="text-espresso/40 dark:text-alabaster/40 font-mono text-[10px] tracking-widest uppercase mb-4 flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
+            {formatDateFull(time)} • {formatClock(time)}
+          </p>
+          <h1 className="text-5xl md:text-7xl font-sans text-espresso dark:text-alabaster tracking-tight font-medium" style={{ letterSpacing: '-0.04em' }}>
+            {getGreeting()}.
+          </h1>
+          <p className="text-espresso/60 dark:text-alabaster/60 text-lg md:text-xl mt-4 max-w-lg leading-relaxed font-light">
+            Your personal workspace is ready. Today is a clean canvas to optimize habits, execute actions, and capture creative logs.
+          </p>
+        </div>
 
-          {/* Dynamic Daily Focus HUD */}
-          <div className="mt-6 pt-6 border-t border-sand/20">
-            <div className="text-[10px] text-sand/60 font-black uppercase tracking-[0.2em] mb-3">
-              Today's Primary Objective
+        {/* Dynamic Daily Focus HUD */}
+        <div className="md:w-96">
+          <div className="p-6 bg-white/50 dark:bg-espresso-surface/50 backdrop-blur-md rounded-[2.5rem] border border-sand dark:border-white/5">
+            <div className="text-[10px] text-espresso/50 dark:text-alabaster/50 font-bold uppercase tracking-[0.2em] mb-3 flex items-center gap-2">
+              <Target className="w-3 h-3 text-accent" />
+              Primary Objective
             </div>
             {isEditingFocus ? (
               <form onSubmit={handleSaveFocus} className="flex gap-2">
@@ -185,69 +183,45 @@ export default function DashboardTab({ data, updateData, setActiveTab, getCurren
                   type="text"
                   value={newFocusInput}
                   onChange={(e) => setNewFocusInput(e.target.value)}
-                  placeholder="Set your absolute #1 priority for target focus today..."
-                  className="flex-1 bg-black/20 border border-white/10 text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sand/50 placeholder:text-sand/30 backdrop-blur-sm"
+                  placeholder="Set your absolute #1 priority..."
+                  className="flex-1 bg-parchment/50 dark:bg-black/20 border border-sand dark:border-white/10 text-espresso dark:text-alabaster rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 placeholder:text-espresso/30 dark:placeholder:text-alabaster/30"
                   required
                 />
                 <button
                   type="submit"
-                  className="bg-white text-espresso hover:bg-parchment font-black text-xs px-5 py-2.5 rounded-xl transition-all duration-200 flex items-center space-x-2 cursor-pointer shadow-sm active:scale-95"
+                  className="bg-accent text-white dark:text-cocoa hover:bg-accent-hover font-black text-xs h-[52px] w-[76.1562px] rounded-2xl transition-all duration-200 flex items-center justify-center cursor-pointer shadow-lg shadow-accent/20 active:scale-95"
                 >
-                  <Plus className="w-4 h-4" />
-                  <span>Lock In</span>
+                  <Plus className="w-4 h-4 flex-shrink-0 ml-[-10px]" />
+                  <span className="pl-[-5px] ml-0">Lock In</span>
                 </button>
               </form>
             ) : (
-              <div className="flex items-center justify-between bg-black/20 border border-white/5 rounded-2xl p-4 gap-3 backdrop-blur-md group/focus">
-                <div className="flex items-center space-x-4 flex-1 min-w-0">
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center space-x-4">
                   <button 
                     onClick={handleToggleFocus}
-                    className="flex-shrink-0 cursor-pointer text-sand/50 hover:text-white transition-colors"
+                    className={`w-10 h-10 rounded-2xl flex items-center justify-center border-2 transition-all ${
+                      data.focus?.completed 
+                        ? 'bg-accent border-accent text-white dark:text-cocoa' 
+                        : 'border-sand dark:border-white/20 text-transparent hover:border-accent/50'
+                    }`}
                   >
-                    <CheckSquare className={`w-7 h-7 transition-all ${data.focus?.completed ? 'fill-white stroke-espresso text-espresso' : 'opacity-80 hover:scale-110'}`} />
+                    <CheckSquare className="w-5 h-5" />
                   </button>
-                  <span className={`text-sm md:text-base font-bold truncate transition-all ${data.focus?.completed ? 'line-through text-sand/40' : 'text-white'}`}>
+                  <span className={`text-lg font-medium transition-all ${data.focus?.completed ? 'line-through text-espresso/40 dark:text-alabaster/40' : 'text-espresso dark:text-alabaster'}`}>
                     {data.focus?.text}
                   </span>
                 </div>
-                <div className="flex items-center space-x-3">
-                  {data.focus?.completed && (
-                    <span className="bg-white/10 text-white text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-wider">
-                      Done
-                    </span>
-                  )}
-                  <button 
-                    onClick={handleClearFocus}
-                    className="text-xs text-sand/50 hover:text-white underline decoration-sand/30 underline-offset-4 cursor-pointer font-bold transition-colors"
-                  >
-                    Change
-                  </button>
-                </div>
+                <button 
+                  onClick={handleClearFocus}
+                  className="text-xs text-espresso/40 dark:text-alabaster/40 hover:text-accent underline decoration-espresso/20 dark:decoration-alabaster/20 underline-offset-4 cursor-pointer transition-colors w-fit"
+                >
+                  Clear Objective
+                </button>
               </div>
             )}
           </div>
         </div>
-
-        {/* Dynamic Digital Clock Card */}
-        <div className="clay-card p-6 flex flex-col justify-between group">
-          <div className="flex items-center justify-between text-espresso/40 dark:text-alabaster/40">
-            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Chronometer HUD</span>
-            <Clock className="w-5 h-5 text-accent soft-pulse" />
-          </div>
-          <div className="my-auto py-8 text-center">
-            <div className="text-4xl md:text-5xl font-black font-mono tracking-tighter text-espresso dark:text-alabaster tabular-nums">
-              {formatClock(time)}
-            </div>
-            <div className="text-[10px] text-espresso/30 dark:text-alabaster/30 mt-3 font-mono font-bold uppercase tracking-[0.1em]">
-              SYSTEM TICK • 3000 INGRESS
-            </div>
-          </div>
-          <div className="flex items-center space-x-3 bg-parchment dark:bg-espresso-surface-bright text-accent rounded-2xl p-3 border border-sand dark:border-espresso-surface transition-colors">
-            <Sparkles className="w-4 h-4 flex-shrink-0" />
-            <span className="text-[11px] font-bold leading-tight italic">Offline-First IndexedDB Engine synchronized.</span>
-          </div>
-        </div>
-
       </div>
 
       {/* Daily Affirmation */}
@@ -514,7 +488,7 @@ export default function DashboardTab({ data, updateData, setActiveTab, getCurren
                     <div className="flex items-center space-x-4 min-w-0">
                       <div className={`w-6 h-6 rounded-lg border flex items-center justify-center flex-shrink-0 transition-all ${
                         isCompletedToday 
-                          ? 'bg-accent border-accent text-white scale-110 shadow-sm' 
+                          ? 'bg-accent border-accent text-white dark:text-cocoa scale-110 shadow-sm' 
                           : 'border-sand dark:border-espresso-surface-bright text-transparent bg-white dark:bg-espresso-surface'
                       }`}>
                         {isCompletedToday && <CheckSquare className="w-4 h-4" />}

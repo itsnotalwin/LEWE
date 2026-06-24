@@ -239,7 +239,7 @@ export default function TasksTab({ data, updateData, getCurrentDate }: TasksTabP
               <div className="flex gap-2 pt-1">
                 <button
                   type="submit"
-                  className="flex-1 bg-accent hover:bg-accent-hover font-black text-[9px] uppercase tracking-widest text-white py-2.5 rounded-xl transition shadow-sm"
+                  className="flex-1 bg-accent hover:bg-accent-hover font-black text-[9px] uppercase tracking-widest text-white dark:text-cocoa py-2.5 rounded-xl transition shadow-sm"
                 >
                   Create
                 </button>
@@ -379,7 +379,7 @@ export default function TasksTab({ data, updateData, getCurrentDate }: TasksTabP
                     setShowAddForm(!showAddForm);
                     setShowProjectForm(false);
                   }}
-                  className="bg-accent hover:bg-accent-hover text-white font-black text-[10px] uppercase tracking-[0.2em] px-6 py-3.5 rounded-2xl transition-all duration-200 shadow-lg shadow-accent/20 flex items-center space-x-2 cursor-pointer active:scale-95"
+                  className="bg-accent hover:bg-accent-hover text-white dark:text-cocoa font-black text-[10px] uppercase tracking-[0.2em] px-6 py-3.5 rounded-2xl transition-all duration-200 shadow-lg shadow-accent/20 flex items-center space-x-2 cursor-pointer active:scale-95"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Log Action</span>
@@ -543,7 +543,7 @@ export default function TasksTab({ data, updateData, getCurrentDate }: TasksTabP
                 </button>
                 <button
                   type="submit"
-                  className="bg-accent hover:bg-accent-hover text-white px-8 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-[0.15em] transition shadow-lg shadow-accent/20 cursor-pointer active:scale-95"
+                  className="bg-accent hover:bg-accent-hover text-white dark:text-cocoa px-8 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-[0.15em] transition shadow-lg shadow-accent/20 cursor-pointer active:scale-95"
                 >
                   Confirm Unit
                 </button>
@@ -570,7 +570,7 @@ export default function TasksTab({ data, updateData, getCurrentDate }: TasksTabP
                     >
                       <div className={`w-6 h-6 rounded-xl border-2 flex items-center justify-center transition-all duration-300 ${
                         task.completed 
-                          ? 'bg-accent border-accent text-white scale-110' 
+                          ? 'bg-accent border-accent text-white dark:text-cocoa scale-110' 
                           : 'border-sand dark:border-espresso-surface-bright text-transparent bg-parchment/30 group-hover/tick:border-accent/50'
                       }`}>
                         {task.completed && <CheckSquare className="w-4 h-4" />}

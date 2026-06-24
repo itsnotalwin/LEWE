@@ -3,14 +3,14 @@
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
   /* Custom Palette: Light Mode */
   --color-parchment: #faf6f0;
   --color-espresso: #272421;
   --color-sand: #e6dac6;
-  --color-sand-hover: #dbccb4;
+  --color-sand-hover: #d5c8b3;
 
   /* Custom Palette: Dark Mode */
   --color-cocoa: #121110;
@@ -18,12 +18,16 @@
   --color-espresso-surface-bright: #242120;
   --color-alabaster: #fcfaf7;
 
-  /* Interaction Colors */
-  --color-accent: #8b5e3c; /* A warm earthy accent that fits both themes */
-  --color-accent-hover: #724d31;
+  /* Interaction Colors - Warm Accent */
+  --color-accent: #c58f5c;
+  --color-accent-hover: #b07d56;
 }
 
 @layer base {
+  html, body {
+    overflow-x: hidden;
+  }
+  
   body {
     font-family: var(--font-sans);
     @apply bg-parchment text-espresso transition-colors duration-500;
@@ -44,22 +48,31 @@
       @apply bg-cocoa text-alabaster;
     }
   }
+
+  /* Prevent iOS zoom on inputs */
+  @media screen and (max-width: 767px) {
+    input, select, textarea {
+      font-size: 16px !important;
+    }
+  }
 }
 
-/* Custom visual scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: var(--color-sand);
-  border-radius: 9999px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-sand-hover);
+/* Custom visual scrollbar for desktop only */
+@media (pointer: fine) {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-sand);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-sand-hover);
+  }
 }
 
 /* Micro pulse keyframes */
@@ -96,16 +109,16 @@
   @apply bg-gradient-to-br from-espresso-surface to-cocoa border-white/[0.05] shadow-[0_8px_40px_rgba(0,0,0,0.5)];
 }
 
-/* Custom override for dark mode primary/accent color to have high contrast warm tone */
+/* Custom override for dark mode primary/accent color to have high contrast */
 :root.dark {
-  --color-accent: #c58f5c;
-  --color-accent-hover: #b07d56;
+  --color-accent: #dca072;
+  --color-accent-hover: #efb990;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not(.light) {
-    --color-accent: #c58f5c;
-    --color-accent-hover: #b07d56;
+    --color-accent: #dca072;
+    --color-accent-hover: #efb990;
   }
 }
 

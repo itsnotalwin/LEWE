@@ -280,7 +280,7 @@ export default function SettingsTab({ data, updateData, resetAllData }: Settings
         </div>
 
         {/* Right Side: Deployment & Longevity Guide */}
-        <div className="clay-card bg-espresso-surface dark:bg-black text-white p-8 border-none shadow-2xl flex flex-col justify-between group">
+        <div className="clay-card bg-espresso dark:bg-cocoa text-alabaster p-8 border border-espresso-surface dark:border-white/5 shadow-2xl flex flex-col justify-between group">
           <div className="space-y-8">
             <div className="flex items-center space-x-3 text-accent">
               <Globe className="w-5 h-5 animate-pulse" />
@@ -294,7 +294,7 @@ export default function SettingsTab({ data, updateData, resetAllData }: Settings
             <div className="space-y-6 pt-4">
               {/* Longevity 1 */}
               <div className="flex items-start space-x-4 group/step">
-                <span className="bg-white/5 text-accent font-mono font-black text-[10px] w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 border border-white/10 group-hover/step:bg-accent group-hover/step:text-white transition-colors">
+                <span className="bg-white/5 text-accent font-mono font-black text-[10px] w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 border border-white/10 group-hover/step:bg-accent group-hover/step:text-espresso transition-colors">
                   01
                 </span>
                 <div className="space-y-1.5 min-w-0">

@@ -287,11 +287,11 @@ export default function HabitsTab({ data, updateData, getCurrentDate }: HabitsTa
                   onClick={() => toggleHabitDate(habit.id, todayStr)}
                   className={`relative flex items-center justify-center space-x-2.5 px-6 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all duration-300 w-full group/btn cursor-pointer ${
                     habit.history[todayStr]
-                      ? 'bg-accent text-white shadow-lg shadow-accent/20 border border-accent'
+                      ? 'bg-accent text-white dark:text-cocoa shadow-lg shadow-accent/20 border border-accent'
                       : 'bg-white dark:bg-espresso-surface border border-sand dark:border-white/10 text-espresso dark:text-alabaster shadow-sm hover:border-accent/40 hover:text-accent transform hover:-translate-y-0.5'
                   }`}
                 >
-                  <CheckCircle className={`w-4 h-4 transition-transform group-hover/btn:scale-110 ${habit.history[todayStr] ? 'text-white' : 'text-accent'}`} />
+                  <CheckCircle className={`w-4 h-4 transition-transform group-hover/btn:scale-110 ${habit.history[todayStr] ? 'text-white dark:text-cocoa' : 'text-accent'}`} />
                   <span>{habit.history[todayStr] ? 'Complete' : 'Record Done'}</span>
                 </button>
               </div>
@@ -312,11 +312,11 @@ export default function HabitsTab({ data, updateData, getCurrentDate }: HabitsTa
                         onClick={() => toggleHabitDate(habit.id, day.dateStr)}
                         className={`flex flex-col items-center py-4 px-2 rounded-2xl border transition-all duration-200 cursor-pointer select-none relative group/day ${
                           isChecked 
-                            ? 'bg-accent text-white border-accent shadow-accent/20 shadow-md' 
+                            ? 'bg-accent text-white dark:text-cocoa border-accent shadow-accent/20 shadow-md' 
                             : 'bg-parchment/60 dark:bg-espresso-surface-bright text-espresso dark:text-alabaster border-sand dark:border-white/5 hover:border-accent/40'
                         }`}
                       >
-                        <span className={`text-[9px] font-black uppercase tracking-widest leading-none mb-2 ${isChecked ? 'text-white/60' : 'text-espresso/30 dark:text-alabaster/30'}`}>
+                        <span className={`text-[9px] font-black uppercase tracking-widest leading-none mb-2 ${isChecked ? 'text-white/60 dark:text-cocoa/60' : 'text-espresso/30 dark:text-alabaster/30'}`}>
                           {day.weekdayLabel}
                         </span>
                         <span className="text-sm font-black font-mono leading-none">
@@ -331,7 +331,7 @@ export default function HabitsTab({ data, updateData, getCurrentDate }: HabitsTa
                         {/* Visual guide for Today */}
                         {isTodayLocal && (
                           <span className={`absolute -top-1.5 text-[7px] font-black uppercase tracking-[0.15em] px-2 py-0.5 rounded-full shadow-sm ${
-                            isChecked ? 'bg-black text-white' : 'bg-accent text-white'
+                            isChecked ? 'bg-black text-white' : 'bg-accent text-white dark:text-cocoa'
                           }`}>
                             NOW
                           </span>
